@@ -1,18 +1,35 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Todos</h1>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import router from '../router'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+
+  },
+  methods: {
+    checkLoggedIn(){
+      // Session Storage에 token이 있으면 login 된 상태
+      this.$session.start() // session 시작
+      // session에 jwt가 없으면
+      if (!this.$session.has('jwt')){
+        // 로그인 페이지로 redirect
+        router.push('/login')
+      }
+    }
+  },
+  // checkLoggedIn 함수를 실행한다.
+  mounted: function(){
+    this.checkLoggedIn()
   }
 }
 </script>
+
+<style>
+
+</style>

@@ -5,6 +5,11 @@
     </div>
     <!-- template에는 하나의 요소만 필요 -->
     <div v-else class="login-div col-6 offset-3">
+      <div v-if="errors.length" class="error-list alert alert-danger">
+        <!-- idx는 for문을 돌았을 때의 idx를 말한다. -->
+        <!-- 에러 목록 -->
+        <div v-for="(error, idx) in errors" :key="idx">{{error}}</div>
+      </div>
       <div class="form-group">
         <label for="id">ID</label>
         <input
@@ -40,14 +45,16 @@ export default {
         username: '',
         password: ''
       },
-      loading: false
+      loading: false,
+      errors: [],
     }
   },
   methods: {
     login(){
-      console.log('로그인 시도!!!')
-      // Django 서버로 요청을 보내야 한다. token 값도 가져와야 한다.
-      axios.post('http://localhost:8000/api-token-auth/', this.credential) // object 자체를 넘겨준다.
+      if (this.checkForm()){
+        console.log('로그인 시도!!!')
+        // Django 서버로 요청을 보내야 한다. token 값도 가져와야 한다.
+        axios.post('http://localhost:8000/api-token-auth/', this.credential) // object 자체를 넘겨준다.
         .then((res)=>{
           this.loading = true
           
@@ -64,6 +71,21 @@ export default {
           this.loading = true
           console.log(error)
         })
+      }
+    },
+    // validation 만들기. login 할 때 사용한다.
+    // django처럼 validation을 할 때 vue library도 적용 가능하다.
+    checkForm(){
+      this.errors = []
+      // 비밀번호 길이가 8보다 작을 경우
+      if (this.credential.password.length < 8) {this.errors.push("비밀번호는 8글자가 넘어야합니다.")}
+      // 아이디를 적지 않은 경우
+      if (!this.credential.username) {this.errors.push("아이디를 입력해주세요.")}
+      console.log(this.errors)
+      // 데이터가 정상적으로 들어왔다면
+      if (this.errors.length === 0) {
+        return true
+      }
     }
   }
 }
