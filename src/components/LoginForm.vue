@@ -57,7 +57,7 @@ export default {
           this.$session.start()
           this.$session.set('jwt', res.data.token) // 저장을 한다.
 
-          // redirect 기능을 한다.
+          // redirect 기능을 해준다.
           router.push('/') // root 주소(Home.vue)로 밀어준다.
         })
         .catch((error)=>{
