@@ -27,13 +27,15 @@ export default {
     return {
       // 만들어지는 순간 할당이 되고 바뀌지 않는다.
       // 세션이 바뀌는 것은 computed와 watch는 탐지할 수 없다.
-      isAuthenticated: this.$session.has('jwt')
+      // isAuthenticated: this.$session.has('jwt')
+      isAuthenticated: this.$store.getters.isAuthenticated
     }
   },
   methods: {
     logout: function(){
       // console.log("로그아웃버튼 눌림")
-      this.$session.destroy() // 세션 정보를 전부 날린다.
+      // this.$session.destroy() // 세션 정보를 전부 날린다.
+      this.$store.dispatch('logout')
       this.$router.push('/login') // 로그인페이지로 redirect
     }
   },
@@ -41,7 +43,8 @@ export default {
   // logout을 실행시키면서 router를 다른 곳으로 보낸다.
   // App.vue는 최상위 컴포넌트기 때문에 로그인 상태인지 모든 컴포넌트에서 확인할 수 있다.
   updated: function(){
-    this.isAuthenticated = this.$session.has('jwt')
+    // this.isAuthenticated = this.$session.has('jwt')
+    this.isAuthenticated = this.$store.getters.isAuthenticated
   }
 }
 </script>

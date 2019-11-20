@@ -61,8 +61,10 @@ export default {
           // console.log(res) // res를 출력하면 data의 안에 token 값이 있는 것을 확인할 수 있다.
           res.data.token
 
-          this.$session.start()
-          this.$session.set('jwt', res.data.token) // 저장을 한다.
+          // this.$session.start()
+          // this.$session.set('jwt', res.data.token) // 저장을 한다.
+
+          this.$store.dispatch('login', res.data.token) // auth.js의 actions의 login을 말한다.
 
           // redirect 기능을 해준다.
           router.push('/') // root 주소(Home.vue)로 밀어준다.
